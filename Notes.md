@@ -3,7 +3,7 @@ This is the notes page, here I have recorded each and every step and thought pro
 
 ---
 
-### Intro
+### Introduction
 A video game is essentially like a movie in which the frames or images generated is based on the players input
 
 1. Checking the player input -> the event loop
@@ -197,3 +197,101 @@ Learn pygame to become a good programmer
 ---
 
 #### Animations
+- Currently, the image looks static and the images are in the same position
+- Since we always place the images in the same position and the image is updated 60 times per second, it remains static to us.
+- If we update the position of each of the surfaces, we would get a moving image.
+- Animating each surface just means changing the position slightly on each frame
+- Use `screen.blit()` and instead of one constant position, use a variable which is continuously updated.
+
+- Now we are going to draw the snail enemy and make him go from right to left to show that the snail is moving:
+    - First, making the snail object: `snail_surface = pygame.image.load('Jumping-Snail/graphics/snail/snail1.png')`
+    - Then draw it on the surface: `screen.blit(snail_surface,(600,265))` : this means, 600 pixels from the left and 265 from the top
+- Now the snail is Static since the snail is always in the same position
+
+- In order to chage this:
+    - Create another variable for the 'x' position which is 600
+        - `snail_x_pos = 600`
+        - and this changes to: `screen.blit(snail_surface,(snail_x_pos,265))`
+        - if we run this, nothing will change, since it is the same
+    
+    - Now, since it is a while loop, we can change the `snail_x_pos` variable, since the while loop will be running until the game is closed correct.
+        - So what we do now is add an incremenet or decrement
+            - increment to move the snail from left to right
+            - decremenet to move the snail from right to left
+        
+        - Since in this case we want to show that the runner is running toward the snail, we must move it from right to left and hence decrement the value of `snail_x_pos` by any amount to get the snail to 'move'
+
+        - This is what we get: `snail_x_pos -= 4 #moves the snail to the left by 4 pixels each frame`
+
+    - This will allow the snail to leave the screen and never be seen again
+
+    - Now for the snail to be seen again:
+        - After it crosses a certain point in the screen, reset the position to 800, which is bigger than the size of the window, so it will seem like the snail has re-appeared and is looping
+        - The snail's width is 100 pixels, so once the snail completely crosses the screen, the position of the screen will become -100 or lesser, then we change the position back to 800 and go again.
+    - This will be the code: 
+        - `snail_x_pos -= 4` 
+        - `if snail_x_pos < -100: snail_x_pos = 800`
+
+- Big Note:
+    - Everytime we update the surface, i.e., the while loop is being updated, we are essentially re-drawing all the images again on top of the previous frame and not getting rid of it really.
+    - You want to draw a proper background so that it goes well.
+
+
+---
+
+#### Coverting the Background
+- We convert the background image to something that pygame can work with more easily.
+- We do this by adding `.covert()` when we are declairing the images used.
+- convert() is used to optimize the image for faster rendering
+    - `sky_surface = pygame.image.load('Jumping-Snail/graphics/Sky.png').convert()`
+    - `ground_surface = pygame.image.load('Jumping-Snail/graphics/ground.png').convert()`
+- covert_alpha() is used to optimize as well but it removes the white and black stuff behind the image
+    - `snail_surface = pygame.image.load('Jumping-Snail/graphics/snail/snail1.png').convert_alpha()`
+
+- This is important and good practice to make sure that the rendering is done as smoothly as possible.
+
+---
+
+#### Rectangles
+The core functions of rectangles are:
+
+1. Help placing surfaces precisely and efficiently
+2. Detect basic Collisions
+
+1. Placing the surface precisely:
+    - We only place the top left currently, so ideally we want to get a point in the bottom of the snail to be more precise
+
+    - To do this:
+        - Separate the images in 2 steps:
+            - image information is placed on the surface 
+            - Placement via the rectangle: position is on the rectangle
+            - this uses the sprite class
+            - split the image into 2 variables and control it together
+    
+    - How does the rectangle work?
+        -  The points on the rectangle that we can work with are:
+            - Either as a tuple (x,y):
+                - topleft
+                - midtop
+                - topright
+                - midleft
+                - center
+                - midright
+                - bottomleft
+                - midbottom
+                - bottomright
+            - Or individual positions like left or right:
+                - top
+                - left
+                - center_x, center_y
+                - right
+                - bottom
+            - If we move any individual points on the rectangle then we move all the other points, they all stay relative to each other
+            - There is also size, width and height
+            - We can use rectangle to place a surface anywhere in the rectangle.
+
+    - Drawing the player:
+        - To initialize the player: `player_surface = pygame.image.load('Jumping-Snail/graphics/Player/player_walk_1.png').convert_aplha()`
+        - To draw the player: `screen.blit(player_surface,(80,200))`
+
+
