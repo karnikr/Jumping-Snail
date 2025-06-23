@@ -32,6 +32,7 @@ Learn pygame to become a good programmer
 
 ### Coing Part:
 
+#### This part has the basic set up of our Game Window
 1. `pygame.init()`
     - this is really important and neccesaary to run for pygame
     - starts pygame and initiaties the subparts like rendering images and sound and stuff
@@ -54,3 +55,62 @@ Learn pygame to become a good programmer
     - only call it and dont think about it type beat
 
 Now we are going to make an event to close the loop
+6. `for event in pygame.event.get():`
+    - this is to loop through all the events
+    - `pygame.evet.get()` is used to get the events
+    - `for event in` part is just used to loop through the events
+
+7. `if event.type == pygame.QUIT:`
+    - this checks if the type of the event is `QUIT`
+    - this is a constant that is the same as the 'x' button on the window or the cross button used to close the window
+
+8. Most Common Event Types:
+    - `QUIT`
+    - `ACTIVEEVENT`
+    - `KEYDOWN`
+    - `KEYUP`
+    - `MOUSEMOTION`
+    - `MOUSEBUTTONUP`
+    - `MOUSEBUTTONDOWN`
+    - `JOYAXISMOTION`
+    - `JOYBALLMOTION`
+    - `JOYHATMOTION`
+    - `JOYBUTTONUP`
+    - `JOYBUTTONDOWN`
+    - `VIDEORESIZE`
+    - `VIDEOEXPOSE`
+    - `USEREVENT`
+    -- (I will explain these later, but these are common according to documentation)
+
+
+9. When we call `pygame.quit()` it quits the window
+    - `pygame.quit()` is the opposite of `pygame.init()`
+    - Since the `while` loop is open we find an error since after the `init` is `quitted`, mthe next `pygame,display.update()` won't work
+    - this is why we use `exit()` and `from sys import exit`
+
+10. Now we have to determine the framerate of our game
+    - the animation speed depends on how fast we are updating the game
+    - lets say we have a character who moves 10px to the right every frame:
+        - 1 frame per sec -> 10px/s * 1fps -> 10px/second
+        - 1 frames per sec -> 10px/s * 100fps -> 1000px/second
+        - this defers the speed of the game
+        - we have to address this for the game to run consistently
+    
+    - Ideally run it at 60 fps for the game contantly
+        - Create a ceiling and a floor for the frame rate
+        - creating the ceiling is easy since we can tell the computer to pause between frames (slow it down)
+        - creating the floor is harder since we need to get the computer to run faster than it is (speed it up) (if computer is slower than the computer)
+            - to account for the min frame rate, ensure there isnt too much at the same time on the screen
+
+    
+    - For all this:
+        - create a `clock` object
+            - to help with time and frame rate
+        - `clock = pygame.time.Clock()` 
+            - to control the frame rate
+        - when we call it in the while loop: `clock.tick(60)`
+            - this tells that the while loop should not run faster than 60 times per second, to ensure that the game does not run too fast
+            - this sets the maximum frame rate
+---
+
+### Now for Displaying the images
