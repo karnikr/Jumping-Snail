@@ -258,6 +258,8 @@ The core functions of rectangles are:
 1. Help placing surfaces precisely and efficiently
 2. Detect basic Collisions
 
+Futhermore: 
+
 1. Placing the surface precisely:
     - We only place the top left currently, so ideally we want to get a point in the bottom of the snail to be more precise
 
