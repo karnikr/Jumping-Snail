@@ -54,8 +54,9 @@ Learn pygame to become a good programmer
     - all this is doing is updating the surface that is being shown to the user
     - only call it and dont think about it type beat
 
-Now we are going to make an event to close the loop
+
 6. `for event in pygame.event.get():`
+    - Now we are going to make an event to close the loop
     - this is to loop through all the events
     - `pygame.evet.get()` is used to get the events
     - `for event in` part is just used to loop through the events
