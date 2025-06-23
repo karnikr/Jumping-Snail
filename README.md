@@ -32,25 +32,25 @@ Learn pygame to become a good programmer
 
 ### Coing Part:
 
-`pygame.init()`
-1. this is really important and neccesaary to run for pygame
-2. starts pygame and initiaties the subparts like rendering images and sound and stuff
-3. like starting the engine of the car
+1. `pygame.init()`
+    - this is really important and neccesaary to run for pygame
+    - starts pygame and initiaties the subparts like rendering images and sound and stuff
+    - like starting the engine of the car
 
-`screen = pygame.display.set_mode((800, 600))`
-This is to create the screen that the user will see
-- the `.display.set_mode` sets the window and it is followed by the width and the height like `(width,height)`
+2. `screen = pygame.display.set_mode((800, 600))`
+    - This is to create the screen that the user will see
+    - the `.display.set_mode` sets the window and it is followed by the width and the height like `(width,height)`
 
-`pygame.display.set_caption("Jumping Snail")`
-- `.set_caption` is to set the title of the window, in this case "Jumping Snail"
+3. `pygame.display.set_caption("Jumping Snail")`
+    - `.set_caption` is to set the title of the window, in this case "Jumping Snail"
 
-`while True:`
-- this is used to make sure that the window stays open
-- this is to draw all our elements
-- and to update the display that is shown to the user
+4. `while True:`
+    - this is used to make sure that the window stays open
+    - this is to draw all our elements
+    - and to update the display that is shown to the user
 
-`pygame.display.updae()`
-- all this is doing is updating the surface that is being shown to the user
-- only call it and dont think about it type beat
+5. `pygame.display.updae()`
+    - all this is doing is updating the surface that is being shown to the user
+    - only call it and dont think about it type beat
 
 Now we are going to make an event to close the loop
