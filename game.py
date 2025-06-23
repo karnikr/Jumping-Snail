@@ -4,18 +4,31 @@ from sys import exit
 pygame.init() #initiazes pygame 
 
 #Create the display surface - the window the user will see
-screen = pygame.display.set_mode((800, 600)) #width, height
+screen = pygame.display.set_mode((800, 425)) #width, height
 pygame.display.set_caption("Jumping Snail") #title of the window
+
 clock = pygame.time.Clock() #to control the frame rate
+test_font = pygame.font.Font('Jumping-Snail/font/Pixeltype.ttf', 50) #Pixel font with size 50
+
+
+sky_surface = pygame.image.load('Jumping-Snail/graphics/Sky.png')
+ground_surface = pygame.image.load('Jumping-Snail/graphics/ground.png')
+text_surface = test_font.render('JUMPING SNAIL', False, 'Red')
 
 
 while True:      #This is to run the game forever
+    # To draw all our elements
+    # To update everything
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()   #Quits the game if the window is closed
             exit()  # Exits the game if the window is closed
-    # To draw all our elements
-    # To update everything
+
+    screen.blit(sky_surface,(0,0)) #draws the sky surface on the screen at position (0,0)
+    screen.blit(ground_surface,(0,300))
+    screen.blit(text_surface,(300,50))
+
     pygame.display.update() #updates the display surface
     clock.tick(60) #limits the frame rate to 60 FPS
 
