@@ -1,10 +1,9 @@
-# Jumping-Snail
-This is an introductory game to learn pygame
+# Notes
+This is the notes page, here I have recorded each and every step and thought process that has gone through my mind when it comes to learning about how to create this game and learning about Pygame as a whole. Hope this is useful to someone in the future, even if it is just future me.
 
-I am using this repo to help me grow as a programmer and develop more projects
+---
 
-
-## Notes
+### Intro
 A video game is essentially like a movie in which the frames or images generated is based on the players input
 
 1. Checking the player input -> the event loop
