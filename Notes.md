@@ -296,4 +296,69 @@ Futhermore:
         - To initialize the player: `player_surface = pygame.image.load('Jumping-Snail/graphics/Player/player_walk_1.png').convert_aplha()`
         - To draw the player: `screen.blit(player_surface,(80,200))`
 
+        - Now we have noticed that there is a gap between the player and the ground image, so we need to create a rectangle:
+            - `player_rect = pygame.Rect(left, top, width, height)` is one way, but in this we must give it the exact dimensions of the image or thing we have to make the rectangle around. So we need to have another that gets the exact size of the surface
+            - `player_rect = player_surface.get_rect()`: the `.get_rect()` takes the surface and draws a rectangle around it.
+                - we can also specify the exact position where we want to place it by putting the position and the cordinates like: `player_rect = player_surface.get_rect(topleft = (80,200))`, this will make sure that the topleft of the rectangle is placed the position at 80 x and 200 y
+                - once we do that then we change the code a bit from : `screen.blit(player_surface,(80,200))` to `screen.blit(player_surface,player_rect)` which essentially draws the player surface on the screen at the player rect position
+                - now when we change `topleft` to `midleft`, we see the change:
+                `player_rect = player_surface.get_rect(midleft = (80,200))`, this will make sure that the midleft of the rectangle is placed the position at 80 x and 200 y
+                    - essentially, this changes the position of the point of the rectangle that is specified and goes from there.
+                    - normally we place the top left point, instead we are using different points
+                
+        - In order to move the player, we can just use the left point of the rectangle and increment it by 1 to move the player from left to right:
+            - ` player_rect.left += 1 #moves the player rect to the right by 1 pixel each frame`
+        
+        - Same thing for the snail:
+            - `snail_rect = snail_surface.get_rect(bottomright=(600,300)) #rect for the snail surface`
 
+            - `snail_rect.x -= 4 #moves the any point of the snail rectangle to the left by 4 pixels each frame`
+            - `if snail_rect.right <= 0: #checks if the right point of the snail rectangle is less than or equal to 0`
+                - `snail_rect.left = 800 #resets the snail rectangle left point to 800 if it goes off the screen`
+            - `screen.blit(snail_surface,snail_rect)`
+    
+2. Dectecting Collisions:
+    - to check if my one rectangle is colliding with another
+        - `rect1.colliderect(rect2)` : becomes `player_rect.colliderect(snail_rect)` in this case
+            - returns 0 if no collision
+            - returns 1 if collision
+        - pygame checks every single collision and tells us if there is one, the collision triggers multiple times
+            - in this game, we will end it with one collision happens
+            - if there is a health bar or something like that:
+                - make sure you have a single collision and then some invincibility frame
+        - this one is a basic kind of collision
+    
+    - `rect1.collidepoint((x,y))`
+        - another way to check for a collision
+        - checks if one point collides with the rectangle
+        - if you want to click with a mouse on something, this is important
+        - this checks if the position (x,y) is in the rectangle rect1 or not
+            - how to get those position points of the mouse:
+                - `pygame.mouse`
+                    - gives us mouse position or the buttons being pressed and the visibility etc.
+                    - `mouse_pos = pygame.mouse.get_pos() #gets the mouse position`
+                    - `if player_rect.collidepoint(mouse_pos): #checks if the mouse position is within the player rectangle`
+                        -  ` print('Player clicked on the person!')`
+                    - also: `print(pygame.mouse.get_pressed()) #prints the mouse button pressed state` (right, middle, left) buttons
+            - also : `if event.type == pygame.MOUSEMOTION:`
+                -   `print(event.pos) #prints the mouse position when the mouse is moved`
+                - this shows the position of the mouse on the game
+            - also : `if event.type == pygame.MOUSEBUTTONDOWN:` checks if the mouse button is pressed
+            - also: `if event.type == pygame.MOUSEBUTTONUP:` checks if the mouse is release after being pressed
+
+        - to check if the player rectangle is colliding with the mouse as an event:
+            - `if event.type == pygame.MOUSEMOTION:`
+                -   `if player_rect.collidepoint(event.pos): #checks if the mouse position is within the player rectangle`
+                    - `print('Mouse is over the player!')`
+
+                - event loop to see where the position is
+                    -   get mousemotion, position
+
+3. Drawing backgrounds:
+    - Using the `pygame.draw` and then specifying the shape like `.rect()` or `.circle()` we can draw things on the screen
+        - it takes multiple arguments being: (surface,colour,rectangle) being the basic ones and then mutliple after like width, border radius, etc
+        - eg: `pygame.draw.rect(screen, 'Pink', title_rect) #draws a pink rectangle around the title surface`
+        - `screen.blit(title_surface,title_rect)`
+        - eg: `pygame.draw.rect(screen,'Green', score_rect) #draws a green rectangle around the score surface`
+        - `screen.blit(score_surface, score_rect) #draws the score surface on the screen at the score rect position`
+    - You can draw different shapes based on what you want pretty much
