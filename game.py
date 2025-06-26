@@ -28,6 +28,9 @@ snail_rect = snail_surface.get_rect(bottomright=(600,300)) #rect for the snail s
 player_surface = pygame.image.load('Jumping-Snail/graphics/Player/player_walk_1.png').convert_alpha()
 player_rect = player_surface.get_rect(midbottom=(80, 300)) #rect for the player surface
 
+#Gravity
+player_gravity = 0 #initial gravity value
+
 while True:      #This is to run the game forever
     # To draw all our elements
     # To update everything
@@ -36,10 +39,17 @@ while True:      #This is to run the game forever
         if event.type == pygame.QUIT:
             pygame.quit()   #Quits the game if the window is closed
             exit()  # Exits the game if the window is closed
-        #if event.type == pygame.MOUSEMOTION:
-           #if player_rect.collidepoint(event.pos): #checks if the mouse position is within the player rectangle
-           #     print('Mouse is over the player!')
-    
+
+        if event.type == pygame.MOUSEBUTTONDOWN: #checks if the mouse button is pressed
+           if player_rect.collidepoint(event.pos) and player_rect.bottom >=300: #checks if the mouse position is within the player rectangle and if the player is on the floor
+                player_gravity = -20 #sets the player gravity to -20 to make the player jump
+        
+        #Player Movement with event loop
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and player_rect.bottom >=300: #checks if the space key is pressed and if the player is on the floor
+                print('Jump!') #prints 'Jump!' if the space key is pressed
+                player_gravity = -20 #sets the player gravity to -20 to make the player jump
+   
 
     screen.blit(sky_surface,(0,0)) #draws the sky surface on the screen at position (0,0)
     screen.blit(ground_surface,(0,300))
@@ -49,7 +59,6 @@ while True:      #This is to run the game forever
     screen.blit(title_surface,title_rect)
     
     pygame.draw.rect(screen,'Green', score_rect,6, 20) #draws a green rectangle around the score surface
-    pygame.draw.line(screen, "Blue",(0,0),(800,425), 10)
     screen.blit(score_surface, score_rect) #draws the score surface on the screen at the score rect position
     
     snail_rect.x -= 4 #moves the any point of the snail rectangle to the left by 4 pixels each frame
@@ -59,10 +68,27 @@ while True:      #This is to run the game forever
     screen.blit(snail_surface,snail_rect) 
     
     # player_rect.left += 1 #moves the player rect to the right by 1 pixel each frame
+    #Player
+    player_gravity += 1 #increases the gravity value by 1 each frame
+    player_rect.y += player_gravity #moves the player rectangle down by the gravity value each
+    if player_rect.bottom >= 300:
+        player_rect.bottom = 300 #sets the player rectangle bottom to 300 if it goes below 300 (ground level)
     screen.blit(player_surface,player_rect) #draws the player surface on the screen at the player rect position
 
-    #if player_rect.colliderect(snail_rect):
-     #   print('Game Over')
+
+    #Player Movement
+    # Using pygame.key.get_pressed() to check the state of the keys
+   # keys = pygame.key.get_pressed() #gets the state of all the keys
+    #if keys[pygame.K_SPACE]: #checks if the space key is pressed
+    #    player_rect.y -= 5 #moves the player rectangle up by 5 pixels
+    #else:
+    #    player_rect.y += 5 #moves the player rectangle down by 5 pixels if the space key is not pressed
+        
+
+    if player_rect.colliderect(snail_rect):
+        print('Game Over')
+        pygame.quit()
+        exit()
    
     # mouse_pos = pygame.mouse.get_pos() #gets the mouse position
     #if player_rect.collidepoint(mouse_pos): #checks if the mouse position is within the player rectangle

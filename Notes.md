@@ -362,3 +362,88 @@ Futhermore:
         - eg: `pygame.draw.rect(screen,'Green', score_rect) #draws a green rectangle around the score surface`
         - `screen.blit(score_surface, score_rect) #draws the score surface on the screen at the score rect position`
     - You can draw different shapes based on what you want pretty much
+
+---
+
+#### Player Mechanics
+There are 3 parts to this section:
+    -   Keyboard Input
+    -   Jump + Gravity
+    -   Creating a Floor
+
+##### 1. Keyboard Input
+We have two different ways of getting input: pygame.key or event loop in the start of the game.
+
+1. `pygame.key`
+Mainly, the `pygame.key.get_pressed()` function returns all the keys if they have been clicked or not, in 0's and 1's, each of these are associated with a button on the keyboard. The whole list is on the documentation of pygame
+
+We use [] to make it like a dictionary to check if the key is pressed or not like so:
+
+`keys = pygame.key.get_pressed() #gets the state of all the keys`
+    `if keys[pygame.K_SPACE]: #checks if the space key is pressed`
+        `print(jump)`
+
+2. Event Loop:
+In this we can just add the following code to the event for loop:
+```python
+#Player Movement wiith event loop
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE: #checks if the space key is pressed
+                print('Jump!') #prints 'Jump!' if the space key is pressed
+        
+        if event.type == pygame.KEYUP:
+            print('Key released') #prints 'Key released' when any key is released
+```
+
+The reason we have 2 input methods is because of the classes that we learn about later.
+When using classes you want the controls inside of the relevant class. `pygame.mouse` and `pygame.keys` are great for that. These classes are ideally self contained
+
+For more general things like closing the game, event loop is the ideal place. This also allows us to have our input nicely organized in one place.
+
+##### 2. Jumping and Falling (Gravity)
+The more you fall, the faster you fall - this happens in real life, we will mimic it on the code. For this we are going to separete it in to two different parts:
+-   a. We are going to make a gravity variable : `gravity += some_variable`
+-   b. We are going to add this number to move our player down: `player.y += gravity`
+This is not exponential but it'll look accurate-ish
+
+Implementation:
+```python
+    #Player
+    player_gravity += 1 #increases the gravity value by 1 each frame
+    player_rect.y += player_gravity #moves the player rectangle down by the gravity value each
+    screen.blit(player_surface,player_rect) #draws the player surface on the screen at the player rect position
+```
+
+Now to the event loop, we have to reset the gravity to -20 so that it goes up by 20 px each time we press spacebar:
+
+```python
+  #Player Movement wiith event loop
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE: #checks if the space key is pressed
+                print('Jump!') #prints 'Jump!' if the space key is pressed
+                player_gravity = -20 #sets the player gravity to -20 to make the player jump
+```
+
+Now, to make the player jump using the mouse we can use one of two appraoches:
+- mouse collision/position -> button press -> jump
+- button press -> mouse collision/position -> jump (this is more efficient since checking the collision on every frame would be wasteful)
+
+```python
+    if event.type == pygame.MOUSEBUTTONDOWN: #checks if the mouse button is pressed
+           if player_rect.collidepoint(event.pos): #checks if the mouse position is within the player rectangle
+                player_gravity = -20 #sets the player gravity to -20 to make the player jump
+```
+
+##### 3. Creating the Floor
+We could go with checking the collision between the player and the floor and then move the player up if there is a collision
+
+But we dont need to do that in this case, since we know the point at which the floor is going to be, all we need to do is check the 'y' position of the player
+`if player.bottom > 300: player.botton=300`
+
+all we need to do is: 
+
+``` python
+     if player_rect.bottom >= 300:
+        player_rect.bottom = 300 #sets the player rectangle bottom to 300 if it goes below 300 (ground level)
+    screen.blit(player_surface,player_rect)
+```
