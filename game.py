@@ -9,6 +9,7 @@ pygame.display.set_caption("Jumping Snail") #title of the window
 
 clock = pygame.time.Clock() #to control the frame rate
 test_font = pygame.font.Font('Jumping-Snail/font/Pixeltype.ttf', 50) #Pixel font with size 50
+game_active = True #to check if the game is active
 
 #Background surfaces
 sky_surface = pygame.image.load('Jumping-Snail/graphics/Sky.png').convert()
@@ -31,6 +32,7 @@ player_rect = player_surface.get_rect(midbottom=(80, 300)) #rect for the player 
 #Gravity
 player_gravity = 0 #initial gravity value
 
+
 while True:      #This is to run the game forever
     # To draw all our elements
     # To update everything
@@ -40,61 +42,67 @@ while True:      #This is to run the game forever
             pygame.quit()   #Quits the game if the window is closed
             exit()  # Exits the game if the window is closed
 
-        if event.type == pygame.MOUSEBUTTONDOWN: #checks if the mouse button is pressed
-           if player_rect.collidepoint(event.pos) and player_rect.bottom >=300: #checks if the mouse position is within the player rectangle and if the player is on the floor
-                player_gravity = -20 #sets the player gravity to -20 to make the player jump
+        if game_active:
+            if event.type == pygame.MOUSEBUTTONDOWN: #checks if the mouse button is pressed
+                if player_rect.collidepoint(event.pos) and player_rect.bottom >=300: #checks if the mouse position is within the player rectangle and if the player is on the floor
+                    player_gravity = -20 #sets the player gravity to -20 to make the player jump
         
-        #Player Movement with event loop
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and player_rect.bottom >=300: #checks if the space key is pressed and if the player is on the floor
-                print('Jump!') #prints 'Jump!' if the space key is pressed
-                player_gravity = -20 #sets the player gravity to -20 to make the player jump
-   
-
-    screen.blit(sky_surface,(0,0)) #draws the sky surface on the screen at position (0,0)
-    screen.blit(ground_surface,(0,300))
-    pygame.draw.rect(screen, 'Pink', title_rect) 
-    pygame.draw.rect(screen, 'Pink', title_rect, 6, 20) #Margin around the title surface, 6 pixels thick, with rounded corners of radius 20
+            #Player Movement with event loop
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and player_rect.bottom >=300: #checks if the space key is pressed and if the player is on the floor
+                    print('Jump!') #prints 'Jump!' if the space key is pressed
+                    player_gravity = -20 #sets the player gravity to -20 to make the player jump
+        else:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                print("Reset")
+                game_active = True #resets the game active to true if the space key is pressed
+                snail_rect.left = 800 #resets the snail rectangle left position to 800 for now
     
-    screen.blit(title_surface,title_rect)
-    
-    pygame.draw.rect(screen,'Green', score_rect,6, 20) #draws a green rectangle around the score surface
-    screen.blit(score_surface, score_rect) #draws the score surface on the screen at the score rect position
-    
-    snail_rect.x -= 4 #moves the any point of the snail rectangle to the left by 4 pixels each frame
-    if snail_rect.right <= 0: #checks if the right point of the snail rectangle is less than or equal to 0
-        snail_rect.left = 800 #resets the snail rectangle left position to 800 if it goes off the screen
-    
-    screen.blit(snail_surface,snail_rect) 
-    
-    # player_rect.left += 1 #moves the player rect to the right by 1 pixel each frame
-    #Player
-    player_gravity += 1 #increases the gravity value by 1 each frame
-    player_rect.y += player_gravity #moves the player rectangle down by the gravity value each
-    if player_rect.bottom >= 300:
-        player_rect.bottom = 300 #sets the player rectangle bottom to 300 if it goes below 300 (ground level)
-    screen.blit(player_surface,player_rect) #draws the player surface on the screen at the player rect position
-
-
-    #Player Movement
-    # Using pygame.key.get_pressed() to check the state of the keys
-   # keys = pygame.key.get_pressed() #gets the state of all the keys
-    #if keys[pygame.K_SPACE]: #checks if the space key is pressed
-    #    player_rect.y -= 5 #moves the player rectangle up by 5 pixels
-    #else:
-    #    player_rect.y += 5 #moves the player rectangle down by 5 pixels if the space key is not pressed
+    if game_active: #checks if the game is active
+        screen.blit(sky_surface,(0,0)) #draws the sky surface on the screen at position (0,0)
+        screen.blit(ground_surface,(0,300))
+        pygame.draw.rect(screen, 'Pink', title_rect) 
+        pygame.draw.rect(screen, 'Pink', title_rect, 6, 20) #Margin around the title surface, 6 pixels thick, with rounded corners of radius 20
         
+        screen.blit(title_surface,title_rect)
+        
+        pygame.draw.rect(screen,'Green', score_rect,6, 20) #draws a green rectangle around the score surface
+        screen.blit(score_surface, score_rect) #draws the score surface on the screen at the score rect position
+        
+        snail_rect.x -= 4 #moves the any point of the snail rectangle to the left by 4 pixels each frame
+        if snail_rect.right <= 0: #checks if the right point of the snail rectangle is less than or equal to 0
+            snail_rect.left = 800 #resets the snail rectangle left position to 800 if it goes off the screen
+        
+        screen.blit(snail_surface,snail_rect) 
+        
+        # player_rect.left += 1 #moves the player rect to the right by 1 pixel each frame
+        #Player
+        player_gravity += 1 #increases the gravity value by 1 each frame
+        player_rect.y += player_gravity #moves the player rectangle down by the gravity value each
+        if player_rect.bottom >= 300:
+            player_rect.bottom = 300 #sets the player rectangle bottom to 300 if it goes below 300 (ground level)
+        screen.blit(player_surface,player_rect) #draws the player surface on the screen at the player rect position
 
-    if player_rect.colliderect(snail_rect):
-        print('Game Over')
-        pygame.quit()
-        exit()
-   
-    # mouse_pos = pygame.mouse.get_pos() #gets the mouse position
-    #if player_rect.collidepoint(mouse_pos): #checks if the mouse position is within the player rectangle
-    #    print(pygame.mouse.get_pressed()) #prints the mouse button pressed state
 
+        #Player Movement
+        # Using pygame.key.get_pressed() to check the state of the keys
+    # keys = pygame.key.get_pressed() #gets the state of all the keys
+        #if keys[pygame.K_SPACE]: #checks if the space key is pressed
+        #    player_rect.y -= 5 #moves the player rectangle up by 5 pixels
+        #else:
+        #    player_rect.y += 5 #moves the player rectangle down by 5 pixels if the space key is not pressed
+            
 
+        if player_rect.colliderect(snail_rect):
+            print('Game Over')
+            game_active = False #sets the game active to false if the player rectangle collides with the snail rectangle
+    
+        # mouse_pos = pygame.mouse.get_pos() #gets the mouse position
+        #if player_rect.collidepoint(mouse_pos): #checks if the mouse position is within the player rectangle
+        #    print(pygame.mouse.get_pressed()) #prints the mouse button pressed state
+    else:
+        screen.fill('Pink')
+    
     pygame.display.update() #updates the display surface
     clock.tick(60) #limits the frame rate to 60 FPS
 

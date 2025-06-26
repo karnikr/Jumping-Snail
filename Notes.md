@@ -447,3 +447,36 @@ all we need to do is:
         player_rect.bottom = 300 #sets the player rectangle bottom to 300 if it goes below 300 (ground level)
     screen.blit(player_surface,player_rect)
 ```
+
+---
+
+#### State Management in Pygame
+Game Over and Start Screens
+
+Right now we are in the current game mode, if we just put it in an `if` statement. If the game is active, then draw all the things we have seen so far, otherwiese just put the else game over screen.
+
+This is simple but its the main thing to implement a multi level game or system
+
+``` python
+    if player_rect.colliderect(snail_rect):
+            print('Game Over')
+            game_active = False #sets the game active to false if the player rectangle collides with the snail rectangle
+```
+
+This code is added at the end
+
+and Everything in the code is in the loop:
+``` python
+    if game_active: #checks if the game is active
+        screen.blit(sky_surface,(0,0)) 
+        screen.blit(ground_surface,(0,300))
+        .
+        .
+        .
+        if player_rect.colliderect(snail_rect):
+            print('Game Over')
+            game_active = False 
+    else: 
+        #Insert code here if game is not active
+```
+We must also put the event loop part in an if statement to ensure that when we click space again, the game restarts
